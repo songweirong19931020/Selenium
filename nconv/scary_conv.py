@@ -26,6 +26,7 @@ def load_conv():
     'accept-encoding':'gzip, deflate, br',
 
     'accept-language':'zh-CN,zh;q=0.8',
+    'upgrade - insecure - requests': '1',
     'user-agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',# 需要填写
 
     }
@@ -33,6 +34,9 @@ def load_conv():
     r = requests.get(url, headers=headers,timeout=15,allow_redirects=False)
     r.encoding='utf-8'
     t1 = html.fromstring(r.text)
+    # with open ('cz.txt','a+',encoding='UTF-8') as f:
+    #     f.writelines(r.text)
+    #     f.close()
     re_hz = []
     result1 = []
     result2 = []
@@ -63,6 +67,10 @@ def load_conv():
     hu_list2=[]
     hu_list3=[]
     for wh in range(1,11):
+        print(t1.xpath('//*[@class="expand___wz_07"]/div/p/text()'))
+        hz_list.append(t1.xpath('//*[@class="expand___wz_07"]/text()'))
+
+
         hz_sj = t1.xpath('//*[@class="expand___wz_07"]/div' + '[' +str(wh) + ']'+'/p[1]/text()')
         hb_name = t1.xpath('//*[@class="expand___wz_07"]/div' + '[' +str(wh) + ']'+'/p[1]/span/text()')
         hb_qz = t1.xpath('//*[@class="expand___wz_07"]/div' + '[' + str(wh) + ']' + '/p[2]/text()')
@@ -126,3 +134,22 @@ def load_conv():
         conn.commit()
         # 关闭MySQL链接
         conn.close()
+        import pymysql as pm
+        for row in df1.itertuples():
+            conn = pm.connect(host='localhost', user='root', password='root', database='mydb', charset='utf8')
+            cur = conn.cursor()
+            sql = "insert into mydb.concv(sf_name,hb_name,hb_qz,hb_zy,qs_time)\
+                         values ({},{},{},{},{});".format('"' + str(getattr(row, 'sf_name')) + '"',
+                                                          '"' + str(getattr(row, 'hb_name')) + '"',
+                                                          '"' + str(getattr(row, 'hb_qz')) + '"',
+                                                          '"' + str(getattr(row, 'hb_zy')) + '"',
+                                                          '"' + str(getattr(row, 'qs_time')) + '"')
+            # cur.execute(sql)
+            print(sql)
+            cur.execute(sql)
+            # print(row)
+            cur.close()
+            # commit 提交
+            conn.commit()
+            # 关闭MySQL链接
+            conn.close()
