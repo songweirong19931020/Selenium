@@ -7,7 +7,7 @@
 import yagmail
 
 #链接邮箱服务器
-yag = yagmail.SMTP( user="swr19931020@126.com", password="a84906036", host='smtp.126.com')
+yag = yagmail.SMTP( user="{}@126.com", password="{}", host='smtp.126.com')
 
 # 邮箱正文
 contents = ['This is the body, and here is just text http://somedomain/image.png',
