@@ -11,6 +11,12 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import pandas as pd
 
+'''
+:param driver_path为chromedriver存放路径
+:param search 为要查询的职位
+注意若需要下载到本地可以通过pandas库现将数据存入list然后在to_csv到本地
+'''
+
 class Boss_Crawl(object):
     driver_path = r'C:\Program Files (x86)\Google\chromedriver.exe'
     def __init__(self):
